@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .container {
+      display: flex;
+      transition: transform 0.5s ease;
+      position: relative;
+    }
+
+    .section {
+      flex: 0 0 100vw;
+      min-height: 100vh;
+      box-sizing: border-box;
+      padding: 20px;
+      text-align: center;
+      background-color: lavender;
+    }
+
+    /* Add more styles for additional sections */
+
+    .image-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100vw;
+      position: absolute;
+      top: 0;
+      z-index: 1;
+    }
+
+    .slide-image {
+      width: 300px; /* Adjust the width of the image */
+      height: auto; /* Maintain aspect ratio */
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+  </style>
+  <title>Horizontal Scroll Website</title>
+</head>
+<body>
+
+<div class="container" id="horizontal-scroll-container">
+  <div class="section" id="section1">
+    <h1>Section 1</h1>
+    <p>This is the content for Section 1. You can add any HTML elements and text here.</p>
+  </div>
+  <!-- Add more sections as needed -->
+</div>
+
+<div class="image-container" id="imageContainer">
+  <!-- Change "path/to/your/image.png" to the actual path of your image -->
+  <img src="CORE.png" alt="Slide me" class="slide-image" onmousedown="startSlide(event)" onmouseup="endSlide()">
+</div>
+
+<script>
+  var isSliding = false;
+  var initialX;
+  var imageContainer = document.getElementById("imageContainer");
+
+  function startSlide(event) {
+    event.preventDefault();
+    isSliding = true;
+    initialX = event.clientX || event.touches[0].clientX;
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', endSlide);
+    window.addEventListener('touchmove', handleMouseMove);
+    window.addEventListener('touchend', endSlide);
+  }
+
+  function endSlide() {
+    if (isSliding) {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', endSlide);
+      window.removeEventListener('touchmove', handleMouseMove);
+      window.removeEventListener('touchend', endSlide);
+      isSliding = false;
+
+      // Determine the direction of the slide (right or left)
+      var deltaX = event.clientX - initialX;
+      var direction = deltaX > 0 ? "right" : "left";
+
+      // Adjust the threshold based on your preference
+      var threshold = 100;
+
+      // Debugging logs
+      console.log("deltaX:", deltaX);
+      console.log("direction:", direction);
+
+      // Check if the slide is towards the right and exceeds the threshold
+      if (direction === "right" && Math.abs(deltaX) > threshold) {
+        // Navigate to the next page (modify the URL as needed)
+        window.location.href = "NextPage.html";
+      }
+    }
+  }
+
+  function handleMouseMove(event) {
+    if (isSliding) {
+      var currentX = event.clientX || event.touches[0].clientX;
+      var deltaX = currentX - initialX;
+      imageContainer.style.transform = 'translateX(' + deltaX + 'px)';
+    }
+  }
+</script>
+
+</body>
+</html>
